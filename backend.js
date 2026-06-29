@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+require('dotenv').config();
 
 const http = require('http')
 const server = http.createServer(app)
@@ -10,13 +11,13 @@ const io = new Server(server, {
   pingTimeout: 5000
 }) // Attach Socket.IO to the server
 
-const port = 3000
+const port = process.env.PORT || 3000
 
 app.use(express.static('public'))
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html')
-})
+// app.get('/', (req, res) => {
+//   res.sendFile(__dirname + '/index.html')
+// })
 
 const backEndPlayers = {}
 
@@ -165,5 +166,5 @@ setInterval(() => {
 }, 15)
 
 server.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`)
+  console.log(`Server running at ${port}`)
 })
