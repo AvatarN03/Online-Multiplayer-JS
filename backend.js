@@ -7,9 +7,9 @@ const server = http.createServer(app)
 
 const { Server } = require('socket.io')
 const io = new Server(server, {
-  pingInterval: 2000,
-  pingTimeout: 5000
-}) // Attach Socket.IO to the server
+  pingInterval: 25000,
+  pingTimeout: 20000
+})// Attach Socket.IO to the server
 
 const port = process.env.PORT || 3000
 
@@ -46,22 +46,23 @@ io.on('connection', (socket) => {
   io.emit('updatePlayers', backEndPlayers)
 
   socket.on('initGame', ({ width, height, username }) => {
-    console.log(username)
-    backEndPlayers[socket.id] = {
-      x: 1024 * Math.random(),
-      y: 576 * Math.random(),
-      color: `hsl(${360 * Math.random()}, 100%, 50%)`,
-      sequenceNumber: 0,
-      score: 0,
-      username
-    }
 
-    backEndPlayers[socket.id].canvas = {
+  backEndPlayers[socket.id] = {
+    x: 1024 * Math.random(),
+    y: 576 * Math.random(),
+    color: `hsl(${360 * Math.random()},100%,50%)`,
+    sequenceNumber: 0,
+    score: 0,
+    username,
+    canvas: {
       width,
       height
-    }
-    backEndPlayers[socket.id].radius = 10
-  })
+    },
+    radius: 10
+  };
+
+  io.emit("updatePlayers", backEndPlayers);
+});
 
   socket.on('disconnect', (reason) => {
     console.log(reason)

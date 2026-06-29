@@ -3,6 +3,18 @@ const c = canvas.getContext('2d')
 
 const socket = io()
 
+socket.on("connect", () => {
+    console.log("Connected", socket.id);
+});
+
+socket.on("disconnect", (reason) => {
+    console.log("Disconnected:", reason);
+});
+
+socket.on("connect_error", (err) => {
+    console.error(err);
+});
+
 const scoreEl = document.querySelector('#scoreEl')
 
 const devicePixelRatio = window.devicePixelRatio || 1
@@ -188,7 +200,7 @@ function animate() {
 
 animate()
 
-const SPEED = 10
+const SPEED = 5
 const playerInputs = []
 let sequenceNumber = 0
 
@@ -208,6 +220,7 @@ const keys = {
 }
 
 setInterval(() => {
+  if (!frontEndPlayers[socket.id]) return;
   if (keys.w.pressed) {
     sequenceNumber++
     playerInputs.push({ sequenceNumber, dx: 0, dy: -SPEED })
