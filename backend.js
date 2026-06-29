@@ -19,6 +19,28 @@ app.use(express.static('public'))
 //   res.sendFile(__dirname + '/index.html')
 // })
 
+app.get("/api/cron", async (req, res) => {
+  try {
+    console.log("Cron job triggered at:", new Date());
+
+    // Your task
+    // Example:
+    // await cleanupRooms();
+
+    res.status(200).json({
+      success: true,
+      message: "Cron executed"
+    });
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      success: false
+    });
+  }
+});
+
+
 const backEndPlayers = {}
 
 const backEndProjectiles = {}
